@@ -52,10 +52,11 @@ curl -L "https://github.com/arturbosch/detekt/releases/download/${DETEKT_VERSION
     && curl -LO "https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/${SB_VERSION}/spotbugs-${SB_VERSION}.zip" \
     && unzip -q spotbugs-${SB_VERSION}.zip -d /opt/ \
     && mv /opt/spotbugs-${SB_VERSION} /opt/spotbugs \
+    && rm spotbugs-${SB_VERSION}.zip \
     && curl -LO "https://repo1.maven.org/maven2/com/h3xstream/findsecbugs/findsecbugs-plugin/${FSB_VERSION}/findsecbugs-plugin-${FSB_VERSION}.jar" \
-    && mv findsecbugs-plugin-${FSB_VERSION}.jar /opt/spotbugs-${SB_VERSION}/plugin/findsecbugs-plugin.jar \
+    && mv findsecbugs-plugin-${FSB_VERSION}.jar /opt/spotbugs/plugin/findsecbugs-plugin.jar \
     && curl -LO "https://repo1.maven.org/maven2/com/mebigfatguy/fb-contrib/fb-contrib/${FB_CONTRIB_VERSION}/fb-contrib-${FB_CONTRIB_VERSION}.jar" \
-    && mv fb-contrib-${FB_CONTRIB_VERSION}.jar /opt/spotbugs-${SB_VERSION}/plugin/fb-contrib.jar \
+    && mv fb-contrib-${FB_CONTRIB_VERSION}.jar /opt/spotbugs/plugin/fb-contrib.jar \
     && curl "https://cdn.shiftleft.io/download/sl" > /usr/local/bin/sl \
     && chmod a+rx /usr/local/bin/sl \
     && mkdir -p /opt/sl-cli && /usr/local/bin/sl update libplugin \
