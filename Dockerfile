@@ -242,6 +242,7 @@ ENV SHIFTLEFT_HOME=/opt/sl-cli \
     GO111MODULE=auto \
     GOARCH=amd64 \
     GOOS=linux \
+    PYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages: \
     PATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:
 
 USER gitpod
