@@ -230,10 +230,10 @@ RUN curl -LO "https://github.com/ShiftLeftSecurity/sast-scan/archive/master.zip"
 USER root
 RUN chmod +x /tmp/scan-install.sh && bash /tmp/scan-install.sh \
     && rm /tmp/scan-install.sh && ln -s /usr/local/src/sast-scan-master/scan /usr/local/bin/scan \
-    && echo -e "\nexport PYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages:\nPATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:\nDEPSCAN_CMD=\"/home/gitpod/.local/bin/depscan\"\n" >> /home/gitpod/.bashrc \
-    && echo -e "export PMD_CMD=\"/opt/pmd-bin/bin/run.sh pmd\"\n" >> /home/gitpod/.bashrc \
-    && echo -e "export CREDSCAN_CONFIG=\"/usr/local/src/sast-scan-master/credscan-config.toml\"\n" >> /home/gitpod/.bashrc \
-    && echo -e "export SPOTBUGS_HOME=/opt/spotbugs\n" >> /home/gitpod/.bashrc
+    && echo "\nexport PYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages:\nPATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:\nDEPSCAN_CMD=\"/home/gitpod/.local/bin/depscan\"\n" >> /home/gitpod/.bashrc \
+    && echo "export PMD_CMD=\"/opt/pmd-bin/bin/run.sh pmd\"\n" >> /home/gitpod/.bashrc \
+    && echo "export CREDSCAN_CONFIG=\"/usr/local/src/sast-scan-master/credscan-config.toml\"\n" >> /home/gitpod/.bashrc \
+    && echo "export SPOTBUGS_HOME=/opt/spotbugs\n" >> /home/gitpod/.bashrc
 
 FROM builder
 
