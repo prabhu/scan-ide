@@ -35,6 +35,8 @@ RUN yes | unminimize \
         python3 \
         python3-pip \
         python3-dev \
+        libssl1.1 libkrb5-3 zlib1g \
+        libicu66 \
     && locale-gen en_US.UTF-8 \
     && mkdir /var/lib/apt/dazzle-marks \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
@@ -226,7 +228,10 @@ RUN curl -LO "https://github.com/ShiftLeftSecurity/sast-scan/archive/master.zip"
     && chmod +x /usr/local/src/sast-scan-master/scan \
     && rm master.zip
 USER root
-RUN chmod +x /tmp/scan-install.sh && bash /tmp/scan-install.sh && rm /tmp/scan-install.sh
+RUN chmod +x /tmp/scan-install.sh && bash /tmp/scan-install.sh \
+    && rm /tmp/scan-install.sh && ln -s /usr/local/src/sast-scan-master/scan /usr/local/bin/scan \
+    && echo -e "\nPYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages:\nPATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:\nDEPSCAN_CMD=\"/home/gitpod/.local/bin/depscan\"\n" >> /home/gitpod/.bashrc \
+    && echo -e "PMD_CMD=\"/opt/pmd-bin/bin/run.sh pmd\"\n" >> /home/gitpod/.bashrc
 
 FROM builder
 

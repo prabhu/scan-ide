@@ -41,6 +41,7 @@ curl -L "https://github.com/zegl/kube-score/releases/download/v${KUBE_SCORE_VERS
     && chmod +x /usr/local/bin/kube-score \
     && wget "https://github.com/pmd/pmd/releases/download/pmd_releases%2F${PMD_VERSION}/pmd-bin-${PMD_VERSION}.zip" \
     && unzip -q pmd-bin-${PMD_VERSION}.zip -d /opt/ \
+    && mv /opt/pmd-bin-${PMD_VERSION} /opt/pmd-bin \
     && rm pmd-bin-${PMD_VERSION}.zip \
     && curl -L "https://github.com/stedolan/jq/releases/download/jq-${JQ_VERSION}/jq-linux64" -o "/usr/local/bin/jq" \
     && chmod +x /usr/local/bin/jq
@@ -50,6 +51,7 @@ curl -L "https://github.com/arturbosch/detekt/releases/download/${DETEKT_VERSION
     && rm kubesec_linux_amd64.tar.gz \
     && curl -LO "https://repo.maven.apache.org/maven2/com/github/spotbugs/spotbugs/${SB_VERSION}/spotbugs-${SB_VERSION}.zip" \
     && unzip -q spotbugs-${SB_VERSION}.zip -d /opt/ \
+    && mv /opt/spotbugs-${SB_VERSION} /opt/spotbugs \
     && curl -LO "https://repo1.maven.org/maven2/com/h3xstream/findsecbugs/findsecbugs-plugin/${FSB_VERSION}/findsecbugs-plugin-${FSB_VERSION}.jar" \
     && mv findsecbugs-plugin-${FSB_VERSION}.jar /opt/spotbugs-${SB_VERSION}/plugin/findsecbugs-plugin.jar \
     && curl -LO "https://repo1.maven.org/maven2/com/mebigfatguy/fb-contrib/fb-contrib/${FB_CONTRIB_VERSION}/fb-contrib-${FB_CONTRIB_VERSION}.jar" \
