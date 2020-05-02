@@ -123,8 +123,6 @@ RUN curl -fsSL "https://get.sdkman.io" | bash \
              && sdk install maven \
              && sdk flush archives \
              && sdk flush temp \
-             && mkdir /home/gitpod/.m2 \
-             && printf '<settings>\n  <localRepository>/workspace/m2-repository/</localRepository>\n</settings>\n' > /home/gitpod/.m2/settings.xml \
              && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.bashrc.d/99-java \
              && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.bashrc.d/99-java"
 # above, we are adding the sdkman init to .bashrc (executing sdkman-init.sh does that), because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
@@ -203,11 +201,18 @@ RUN curl -LO "https://github.com/ShiftLeftSecurity/sast-scan/archive/master.zip"
     && rm master.zip
 USER root
 RUN chmod +x /tmp/scan-install.sh && bash /tmp/scan-install.sh \
+    && curl -L https://sh.rustup.rs > rust-installer.sh \
+    && chmod +x rust-installer.sh \
+    && bash rust-installer.sh -y \
+    && rm rust-installer.sh \
+    && cargo install cargo-audit \
     && rm /tmp/scan-install.sh && ln -s /usr/local/src/sast-scan-master/scan /usr/local/bin/scan \
     && echo "\nexport PYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages:\nexport PATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:\nexport DEPSCAN_CMD=\"/home/gitpod/.local/bin/depscan\"\n" >> /home/gitpod/.bashrc \
     && echo "export PMD_CMD=\"/opt/pmd-bin/bin/run.sh pmd\"\n" >> /home/gitpod/.bashrc \
     && echo "export CREDSCAN_CONFIG=\"/usr/local/src/sast-scan-master/credscan-config.toml\"\n" >> /home/gitpod/.bashrc \
-    && echo "export SPOTBUGS_HOME=/opt/spotbugs\n" >> /home/gitpod/.bashrc
+    && echo "export SPOTBUGS_HOME=/opt/spotbugs" >> /home/gitpod/.bashrc \
+    && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.bashrc \
+    && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.bashrc
 
 FROM builder
 
