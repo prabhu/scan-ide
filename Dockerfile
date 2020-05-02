@@ -194,6 +194,7 @@ RUN cp /var/lib/dpkg/status /tmp/dpkg-status \
 COPY tests /var/lib/dazzle/tests
 COPY scan-install.sh /tmp
 USER gitpod
+ENV PATH=$PATH:/home/gitpod/.cargo/bin:
 RUN curl -LO "https://github.com/ShiftLeftSecurity/sast-scan/archive/master.zip" \
     && unzip -q master.zip -d /usr/local/src \
     && pip install -r /usr/local/src/sast-scan-master/requirements.txt \
@@ -207,7 +208,7 @@ RUN chmod +x /tmp/scan-install.sh && bash /tmp/scan-install.sh \
     && rm rust-installer.sh \
     && cargo install cargo-audit \
     && rm /tmp/scan-install.sh && ln -s /usr/local/src/sast-scan-master/scan /usr/local/bin/scan \
-    && echo "\nexport PYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages:\nexport PATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:\nexport DEPSCAN_CMD=\"/home/gitpod/.local/bin/depscan\"\n" >> /home/gitpod/.bashrc \
+    && echo "\nexport PYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages:\nexport PATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:/home/gitpod/.cargo/bin:\nexport DEPSCAN_CMD=\"/home/gitpod/.local/bin/depscan\"\n" >> /home/gitpod/.bashrc \
     && echo "export PMD_CMD=\"/opt/pmd-bin/bin/run.sh pmd\"\n" >> /home/gitpod/.bashrc \
     && echo "export CREDSCAN_CONFIG=\"/usr/local/src/sast-scan-master/credscan-config.toml\"\n" >> /home/gitpod/.bashrc \
     && echo "export SPOTBUGS_HOME=/opt/spotbugs" >> /home/gitpod/.bashrc \
@@ -230,6 +231,6 @@ ENV SHIFTLEFT_HOME=/opt/sl-cli \
     GOOS=linux \
     CREDSCAN_CONFIG="/usr/local/src/sast-scan-master/credscan-config.toml" \
     PYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages: \
-    PATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:
+    PATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:/home/gitpod/.cargo/bin:
 
 USER gitpod
