@@ -37,6 +37,10 @@ RUN yes | unminimize \
         python3-dev \
         libssl1.1 libkrb5-3 zlib1g \
         libicu66 \
+        openjdk-8-jre-headless \
+        openjdk-11-jre-headless \
+        maven \
+        gradle \
     && locale-gen en_US.UTF-8 \
     && mkdir /var/lib/apt/dazzle-marks \
     && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/*
@@ -108,25 +112,6 @@ RUN curl -fsSL https://storage.googleapis.com/golang/go$GO_VERSION.linux-amd64.t
 # user Go packages
 ENV GOPATH=/workspace/go \
     PATH=/workspace/go/bin:$PATH
-
-### Java ###
-## Place '.gradle' and 'm2-repository' in /workspace because (1) that's a fast volume, (2) it survives workspace-restarts and (3) it can be warmed-up by pre-builds.
-LABEL dazzle/layer=lang-java
-LABEL dazzle/test=tests/lang-java.yaml
-USER gitpod
-RUN curl -fsSL "https://get.sdkman.io" | bash \
- && bash -c ". /home/gitpod/.sdkman/bin/sdkman-init.sh \
-             && sdk install java 8.0.252-zulu \
-             && sdk install java 11.0.7-zulu \
-             && sdk use java 11.0.7-zulu \
-             && sdk install gradle \
-             && sdk install maven \
-             && sdk flush archives \
-             && sdk flush temp \
-             && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.bashrc.d/99-java \
-             && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.bashrc.d/99-java"
-# above, we are adding the sdkman init to .bashrc (executing sdkman-init.sh does that), because one is executed on interactive shells, the other for non-interactive shells (e.g. plugin-host)
-ENV GRADLE_USER_HOME=/workspace/.gradle/
 
 ### Node.js ###
 LABEL dazzle/layer=lang-node
@@ -211,9 +196,7 @@ RUN chmod +x /tmp/scan-install.sh && bash /tmp/scan-install.sh \
     && echo "\nexport PYTHONPATH=$PYTHONPATH:/home/gitpod/.local/lib/python3.8/site-packages:\nexport PATH=${PATH}:/usr/local/src/sast-scan-master:/opt/sl-cli:/usr/local/bin:/home/gitpod/.cargo/bin:\nexport DEPSCAN_CMD=\"/home/gitpod/.local/bin/depscan\"\n" >> /home/gitpod/.bashrc \
     && echo "export PMD_CMD=\"/opt/pmd-bin/bin/run.sh pmd\"\n" >> /home/gitpod/.bashrc \
     && echo "export CREDSCAN_CONFIG=\"/usr/local/src/sast-scan-master/credscan-config.toml\"\n" >> /home/gitpod/.bashrc \
-    && echo "export SPOTBUGS_HOME=/opt/spotbugs" >> /home/gitpod/.bashrc \
-    && echo 'export SDKMAN_DIR=\"/home/gitpod/.sdkman\"' >> /home/gitpod/.bashrc \
-    && echo '[[ -s \"/home/gitpod/.sdkman/bin/sdkman-init.sh\" ]] && source \"/home/gitpod/.sdkman/bin/sdkman-init.sh\"' >> /home/gitpod/.bashrc
+    && echo "export SPOTBUGS_HOME=/opt/spotbugs" >> /home/gitpod/.bashrc
 
 FROM builder
 
